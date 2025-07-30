@@ -61,6 +61,7 @@ async def on_member_join(member):
 
     # Give the New role to the new member
     await member.add_roles(new_role)
+    member = await member.guild.fetch_member(member.id)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
 #When a member sends a message in waiting hall
