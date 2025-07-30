@@ -35,7 +35,7 @@ async def on_member_join(member):
         print("Member not found.")
     
     # Waiting for discord to finish setting up onboarding roles
-    await asyncio.sleep(2)
+    await asyncio.sleep(10)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
     # Save current roles from onboarding, eksclude @everyone
