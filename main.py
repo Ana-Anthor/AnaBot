@@ -59,7 +59,7 @@ async def on_message(message):
         return 
 
     #channels
-    welcome_channel = discord.utils.get(member.guild.text_channels, name="welcome")
+    welcome_channel = discord.utils.get(message.guild.text_channels, name="welcome")
     waiting_hall_id = 1399070297365155850
     introduction_channel_id = 1151609579000561776
     information_channel_id = 1363917217309130963
