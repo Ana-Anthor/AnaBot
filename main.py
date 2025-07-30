@@ -1,4 +1,5 @@
 # Import the required modules
+import asyncio
 import discord
 import os
 from discord.ext import commands 
@@ -28,9 +29,13 @@ onboarding_roles = {}
 # When a member joins
 @bot.event
 async def on_member_join(member):
-
-    member = await member.guild.fetch_member(member.id)
-
+    try:
+        member = await member.guild.fetch_member(member.id)
+    except discord.NotFound:
+        print("Member not found.")
+    
+    # Waiting for discord to finish setting up onboarding roles
+    await asyncio.sleep(2)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
     # Save current roles from onboarding, eksclude @everyone
