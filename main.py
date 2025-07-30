@@ -35,7 +35,6 @@ async def on_member_join(member):
         print("Member not found.")
     
     # Waiting for discord to finish setting up onboarding roles
-    await asyncio.sleep(10)
     member = await member.guild.fetch_member(member.id)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
@@ -73,7 +72,7 @@ async def on_message(message):
         return 
 
     #channels
-    welcome_channel = discord.utils.get(message.guild.text_channels, name="welcome")
+    welcome_channel = discord.utils.get(message.guild.get_channel(825128605868490815))
     waiting_hall_id = 1399070297365155850
     introduction_channel_id = 1151609579000561776
     information_channel_id = 1363917217309130963
@@ -97,7 +96,15 @@ async def on_message(message):
 
             onboarding_roles.pop(member.id, None)
             
-            await message.channel.send(f"{member.mention}, you're officially a part of the squad! 🔓 You now have full access. Enjoy your stay, {member.display_name}!")
+            await message.channel.send(f"{member.mention}, you're officially a part of the squad! 🔓 You now have full access. Enjoy your stay!")
+
+            # Add the Member role
+            member_role = discord.utils.get(member.guild.roles, name="Member")
+            if member_role:
+                await member.add_roles(member_role)
+            else:
+                print("Member role not found.")
+
 
             # Send a welcome message in the welcome channel
             if welcome_channel:
