@@ -35,6 +35,7 @@ async def on_member_join(member):
         print("Member not found.")
     
     # Waiting for discord to finish setting up onboarding roles
+    await asyncio.sleep(2)
     member = await member.guild.fetch_member(member.id)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
@@ -72,7 +73,7 @@ async def on_message(message):
         return 
 
     #channels
-    welcome_channel = discord.utils.get(message.guild.get_channel(825128605868490815))
+    welcome_channel = message.guild.get_channel(825128605868490815)
     waiting_hall_id = 1399070297365155850
     introduction_channel_id = 1151609579000561776
     information_channel_id = 1363917217309130963
