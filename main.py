@@ -35,7 +35,7 @@ async def on_member_join(member):
         print("Member not found.")
     
     # Waiting for discord to finish setting up onboarding roles
-    await asyncio.sleep(3)
+    await asyncio.sleep(10)
     member = await member.guild.fetch_member(member.id)
     print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
