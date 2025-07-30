@@ -28,8 +28,10 @@ onboarding_roles = {}
 # When a member joins
 @bot.event
 async def on_member_join(member):
-    # Choose which channel to send the welcome message in
-    welcome_channel = discord.utils.get(member.guild.text_channels, name='welcome')
+
+    member = await member.guild.fetch_member(member.id)
+
+    print(f"{member.name} has these roles: {[role.name for role in member.roles]}")
 
     # Save current roles from onboarding, eksclude @everyone
     original_roles = [role for role in member.roles if role.name != "@everyone"]
@@ -39,7 +41,11 @@ async def on_member_join(member):
 
     # Remove old roles
     for role in original_roles:
-        await member.remove_roles(role)
+        try:
+            await member.remove_roles(role)
+            print(f"Removed role: {role.name}")
+        except Exception as e:
+            print(f"Could not remove role {role.name}: {e}")
 
     # See if the server has a role called "New"
     new_role = discord.utils.get(member.guild.roles, name="New")
