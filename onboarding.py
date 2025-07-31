@@ -77,7 +77,7 @@ class OnboardingManager:
                 print(f"Error removing role {role.name}: {e}")
 
     async def restore_onboarding_roles(self, member):
-        roles_to_restore = onboarding_roles[member.id, []]
+        roles_to_restore = onboarding_roles.get(member.id, [])
         for role in roles_to_restore:
             try:
                 await member.add_roles(role)
