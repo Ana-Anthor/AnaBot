@@ -1,0 +1,59 @@
+2025-08-03 19:58:06,883:WARNING:PyNaCl is not installed, voice will NOT be supported
+2025-08-03 19:58:06,891:INFO:logging in using static token
+2025-08-03 19:58:08,158:INFO:Shard ID None has connected to Gateway (Session ID: e1c22a50c88e54f811940f1ce034ee49).
+2025-08-03 19:58:10,198:INFO:Logged in as AnaBotTest in TEST-mode.
+2025-08-03 20:01:58,633:INFO:Message received from ana.ananas._. in channel 676134286788788246
+2025-08-03 20:01:58,633:INFO:greet command executed by ana.ananas._.
+2025-08-03 20:01:58,927:INFO:Message received from AnaBotTest in channel 676134286788788246
+2025-08-03 20:01:58,928:ERROR:Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\anita\AppData\Local\Programs\Python\Python313\Lib\site-packages\discord\client.py", line 449, in _run_event
+    await coro(*args, **kwargs)
+  File "c:\Users\anita\repo\AnaBot\main.py", line 45, in on_message
+    await handle_onboarding_message(message, bot)
+  File "c:\Users\anita\repo\AnaBot\onboarding.py", line 58, in handle_onboarding_message
+    logging.info("Ignoring bot-join: %s", member.name)
+                                          ^^^^^^
+UnboundLocalError: cannot access local variable 'member' where it is not associated with a value
+2025-08-03 20:02:24,843:INFO:Member joined: ana.ananas._. (1399794681394757837)
+2025-08-03 20:02:24,918:INFO:Message received from ana.ananas._. in channel 676134286788788246
+2025-08-03 20:02:25,134:INFO:Bot permissions: <Permissions value=2249583585394423>
+2025-08-03 20:02:25,134:INFO:Bot's highest role: AnaBotTest (position 2)
+2025-08-03 20:02:25,134:INFO:Member ana.ananas._. initial roles: ['@everyone']
+2025-08-03 20:02:26,390:INFO:Role polling took 1.256239414215088 seconds for ana.ananas._.
+2025-08-03 20:02:26,390:INFO:ana.ananas._. has roles: ['@everyone']
+2025-08-03 20:02:26,390:INFO:Storing roles for ana.ananas._.: []
+2025-08-03 20:02:26,614:INFO:ana.ananas._. final roles: ['@everyone']
+2025-08-03 20:07:54,099:WARNING:PyNaCl is not installed, voice will NOT be supported
+2025-08-03 20:07:54,101:INFO:logging in using static token
+2025-08-03 20:07:55,495:INFO:Shard ID None has connected to Gateway (Session ID: 9b98f29a8c210ec617734f8412bd2b15).
+2025-08-03 20:07:57,503:INFO:Logged in as AnaBotTest in TEST-mode.
+2025-08-03 20:08:14,847:INFO:Member joined: ana.ananas._. (1399794681394757837)
+2025-08-03 20:08:14,954:INFO:Message received from ana.ananas._. in channel 676134286788788246
+2025-08-03 20:08:15,157:INFO:Bot permissions: <Permissions value=2249583585394423>
+2025-08-03 20:08:15,157:INFO:Bot's highest role: AnaBotTest (position 2)
+2025-08-03 20:08:15,157:INFO:Member ana.ananas._. initial roles: ['@everyone']
+2025-08-03 20:08:16,374:INFO:Role polling took 1.2177720069885254 seconds for ana.ananas._.
+2025-08-03 20:08:16,375:INFO:ana.ananas._. has roles: ['@everyone']
+2025-08-03 20:08:16,375:INFO:Storing roles for ana.ananas._.: []
+2025-08-03 20:08:16,608:INFO:ana.ananas._. final roles: ['@everyone']
+2025-08-03 20:31:30,432:WARNING:PyNaCl is not installed, voice will NOT be supported
+2025-08-03 20:31:30,434:INFO:logging in using static token
+2025-08-03 20:31:31,737:INFO:Shard ID None has connected to Gateway (Session ID: 84a557744fa6b4b5ab42ed9be666f646).
+2025-08-03 20:31:33,748:INFO:Logged in as AnaBotTest in TEST-mode.
+2025-08-03 20:31:58,372:INFO:Message received from ana.ananas._. in channel 676134286788788246
+2025-08-03 20:31:58,373:INFO:greet command executed by ana.ananas._.
+2025-08-03 20:31:58,736:INFO:Message received from AnaBotTest in channel 676134286788788246
+2025-08-03 20:31:58,736:INFO:Ignoring bot-join: AnaBotTest
+2025-08-03 20:32:11,196:INFO:Member joined: ana.ananas._. (1399794681394757837)
+2025-08-03 20:32:11,273:INFO:Message received from ana.ananas._. in channel 676134286788788246
+2025-08-03 20:32:11,416:INFO:Bot permissions: <Permissions value=2249583585394423>
+2025-08-03 20:32:11,416:INFO:Bot's highest role: AnaBotTest (position 2)
+2025-08-03 20:32:11,416:INFO:Member ana.ananas._. initial roles: ['@everyone']
+2025-08-03 20:32:12,652:INFO:Role polling took 1.2353928089141846 seconds for ana.ananas._.
+2025-08-03 20:32:12,652:INFO:ana.ananas._. has roles: ['@everyone']
+2025-08-03 20:32:12,652:INFO:Storing roles for ana.ananas._.: []
+2025-08-03 20:32:12,652:INFO:Found existing New role (position 1)
+2025-08-03 20:32:13,110:INFO:Added New role to ana.ananas._.
+2025-08-03 20:32:13,340:INFO:ana.ananas._. final roles: ['@everyone', 'New']
+2025-08-03 20:32:22,408:INFO:Message received from ana.ananas._. in channel 1400948241683714148
