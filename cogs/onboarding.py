@@ -28,7 +28,8 @@ class Onboarding(commands.Cog):
         if message.author.bot:
             logging.info("Ignoring bot message: %s", message.author.name)
             return
-        logging.info(f"Message received from {message.author.name} in channel {message.channel.id}")
+        logging.info(f"Message received from {message.author.name} in channel {message.channel.name} with id {message.channel.id}")
+        logging.info("%s has roles: %s", message.author.name, [role.name for role in message.author.roles])
         if message.channel.id == self.config['waiting_hall_id']:
             manager = OnboardingManager(message.guild)
             welcome_manager = WelcomeMessageManager(message.author)
