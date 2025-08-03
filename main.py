@@ -4,7 +4,15 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import os
+import logging
 from utils.config import load_config
+
+# Set up logging to a file
+logging.basicConfig(
+    filename="bot.log",
+    level=logging.INFO,
+    format="%(asctime)s:%(levelname)s:%(message)s"
+)
 
 # Load environment variables
 load_dotenv()
@@ -25,7 +33,7 @@ async def load_cogs():
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {bot.user.name} in {config["environment"]}-mode.')
+    logging.info(f'Logged in as {bot.user.name} in {env}-mode.')
 
 # Run bot
 async def main():

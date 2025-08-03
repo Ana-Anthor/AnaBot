@@ -3,7 +3,7 @@ from utils.onboarding_manager import OnboardingManager
 from utils.welcome_manager import WelcomeMessageManager
 from utils.config import load_config
 from discord.ext import commands
-
+import logging
 
 class Onboarding(commands.Cog):
     def __init__(self, bot):
@@ -12,6 +12,7 @@ class Onboarding(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        logging.info(f"Member joined: {member.name} ({member.id})")
         if member.bot:
             return
         try:
@@ -19,13 +20,15 @@ class Onboarding(commands.Cog):
             manager = OnboardingManager(member.guild)
             await manager.handle_member_join(member)
         except discord.NotFound:
-            print("Member not found.")
+            logging.info("Member not found.")
 
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
+            logging.info("Ignoring bot message: %s", message.author.name)
             return
+        logging.info(f"Message received from {message.author.name} in channel {message.channel.id}")
         if message.channel.id == self.config['waiting_hall_id']:
             manager = OnboardingManager(message.guild)
             welcome_manager = WelcomeMessageManager(message.author)
