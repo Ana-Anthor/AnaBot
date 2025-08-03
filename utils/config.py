@@ -1,27 +1,10 @@
-""" import os
-
-def load_config():
-    env = os.getenv('ENVIRONMENT', 'MAIN')
-    return {
-        'environment': env,
-        'token': os.getenv('TEST_TOKEN' if env == 'TEST' else 'MAIN_TOKEN'),
-        'prefix': os.getenv('BOT_PREFIX', '!'),
-        'waiting_hall_id': int(os.getenv('WAITING_HALL_ID', '1399070297365155850')),
-        'welcome_channel_id': int(os.getenv('WELCOME_CHANNEL_ID', '825128605868490815')),
-        'introduction_channel_id': int(os.getenv('INTRODUCTION_CHANNEL_ID', '1151609579000561776')),
-        'information_channel_id': int(os.getenv('INFORMATION_CHANNEL_ID', '1363917217309130963')),
-        'rules_channel_id': int(os.getenv('RULES_CHANNEL_ID', '1135973867001753711')),
-        'help_channel_id': int(os.getenv('HELP_CHANNEL_ID', '1397028615446855780')),
-    } """
-
-
 import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Loading variables from .env automatic
 
 def load_config():
-    env = os.getenv('ENVIRONMENT', 'TEST').upper() # Use MAIN in main
+    env = os.getenv('ENVIRONMENT', 'MAIN').upper() # Use MAIN in main
 
     config = {
         'MAIN': {
