@@ -12,7 +12,7 @@ class OnboardingManager:
         logging.info("Bot permissions: %s", member.guild.me.guild_permissions)
         logging.info("Bot's highest role: %s (position %d)", member.guild.me.top_role.name, member.guild.me.top_role.position)
         logging.info("Member %s initial roles: %s", member.name, [role.name for role in member.roles])
-    
+        await self.add_role_new(member)
         await asyncio.sleep(10)  # Wait for Discord to sync
         member = await self.guild.fetch_member(member.id)
         logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
@@ -23,7 +23,7 @@ class OnboardingManager:
 
         # Remove old roles and add "New"
         await self.remove_all_roles(member, original_roles)
-        await self.add_role_new(member)
+        #await self.add_role_new(member)
 
         member = await self.guild.fetch_member(member.id)
         logging.info("%s final roles: %s", member.name, [role.name for role in member.roles])
