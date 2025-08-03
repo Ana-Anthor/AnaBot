@@ -29,17 +29,18 @@ async def handle_member_join(member):
     
     # Log environment and process info 
     logging.info("Bot permissions: %s", member.guild.me.guild_permissions)
-    logging.info("Bot's highest role: %s (position %d)", 
-                 member.guild.me.top_role.name, member.guild.me.top_role.position)
+    logging.info("Bot's highest role: %s (position %d)", member.guild.me.top_role.name, member.guild.me.top_role.position)
     logging.info("Member %s initial roles: %s", member.name, [r.name for r in member.roles])
     # Poll roles to ensure onboarding completes
     start_time = time.time()
-    for _ in range(20):
+    initial_roles = len(member.roles)
+    for _ in range(30):
         await asyncio.sleep(1)
         updated_member = await member.guild.fetch_member(member.id)
-        if len(updated_member.roles) == len(member.roles):
+        if len(updated_member.roles) == initial_roles:
             break
         member = updated_member
+        initial_roles = len(updated_member.roles)
     logging.info("Role polling took %s seconds for %s", time.time() - start_time, member.name)
     logging.info("%s has roles: %s", member.name, [r.name for r in member.roles])
     # Store member roles in dictionary with user-ID as key
