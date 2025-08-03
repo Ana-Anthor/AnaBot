@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()  # Loading variables from .env automatic
 
 def load_config():
-    env = os.getenv('ENVIRONMENT', 'MAIN').upper() # Use MAIN in main
+    env = os.getenv('ENVIRONMENT', 'TEST').upper() # Use MAIN in main
 
     config = {
         'MAIN': {
