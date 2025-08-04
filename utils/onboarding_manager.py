@@ -17,13 +17,13 @@ class OnboardingManager:
         member = await self.guild.fetch_member(member.id)
         logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
 
-        # Store roles in dictionary, excluding @everyone
+        # Store roles in dictionary
         original_roles = self.get_roles(member)
         self.onboarding_roles[member.id] = original_roles
 
-        # Remove old roles and add "New"
+        # Remove old roles excetpt "@everyone"
         await self.remove_all_roles(member, original_roles)
-        #await self.add_role_new(member)
+        #await self.add_role_new(member) TODO: remove
 
         member = await self.guild.fetch_member(member.id)
         logging.info("%s final roles: %s", member.name, [role.name for role in member.roles])
@@ -56,7 +56,7 @@ class OnboardingManager:
     async def remove_all_roles(self, member, roles):
         for role in roles:
             try:
-                if role.name != "@everyone":  # Safety check
+                if role.name not in ("@everyone", "@New"):  # Safety check
                     await member.remove_roles(role)
                     logging.info("Removed role: {role.name}")
             except Exception as e:
