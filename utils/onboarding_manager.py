@@ -56,7 +56,7 @@ class OnboardingManager:
     async def remove_all_roles(self, member, roles):
         for role in roles:
             try:
-                if role.name not in ("@everyone", "@New"):  # Safety check
+                if role.name not in ("everyone", "New"):  # Safety check
                     await member.remove_roles(role)
                     logging.info("Removed role: {role.name}")
             except Exception as e:
