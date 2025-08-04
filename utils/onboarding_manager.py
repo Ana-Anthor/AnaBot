@@ -13,6 +13,7 @@ class OnboardingManager:
         logging.info("Bot's highest role: %s (position %d)", member.guild.me.top_role.name, member.guild.me.top_role.position)
         logging.info("Member %s initial roles: %s", member.name, [role.name for role in member.roles])
         await self.add_role_new(member)
+        logging.info("Sleep for 10 s")
         await asyncio.sleep(10)  # Wait for Discord to sync
         member = await self.guild.fetch_member(member.id)
         logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
@@ -56,7 +57,7 @@ class OnboardingManager:
     async def remove_all_roles(self, member, roles):
         for role in roles:
             try:
-                if role.name not in ("everyone", "New"):  # Safety check
+                if role.name not in ("@everyone", "New"):  # Safety check
                     await member.remove_roles(role)
                     logging.info("Removed role: {role.name}")
             except Exception as e:
