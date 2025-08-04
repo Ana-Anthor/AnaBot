@@ -1,3 +1,4 @@
+# utils->onboarding_mamanger.py
 import discord
 import asyncio
 import logging
@@ -17,14 +18,8 @@ class OnboardingManager:
         await self.add_role_new(member)
         start_here_channel = member.guild.get_channel(self.config['start_here_channel_id'])
         await self.send_verification_question(member, start_here_channel)
-        logging.info("Sleep for 10 s")
-        await asyncio.sleep(10)  # Wait for Discord to sync
-        member = await self.guild.fetch_member(member.id)
-        logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
-        if len(member.roles) > 2:
-            logging.info("No extra roles appered. Waiting for 20 s")
-            await asyncio.sleep(10)  # Wait for Discord to sync
-            logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
+   
+    async def handle_onboarding_roles(self, member):
         # Store roles in dictionary
         original_roles = await self.get_roles(member)
         self.onboarding_roles[member.id] = original_roles
@@ -37,7 +32,7 @@ class OnboardingManager:
         await self.remove_all_roles(member, roles_to_remove)
         member = await self.guild.fetch_member(member.id)
         logging.info("%s final roles: %s", member.name, [role.name for role in member.roles])
-    
+
 
     async def handle_onboarding_message(self, member, channel): ###
         # Restore roles from dictionary
@@ -89,9 +84,9 @@ class OnboardingManager:
         for role in roles:
             try:
                 await member.remove_roles(role)
-                logging.info("Removed role: {role.name}")
+                logging.info("Removed role: %s", role.name)
             except Exception as e:
-                logging.info("Error removing role {role.name}: {e}")
+                logging.info("Error removing role %s: %s", role.name, str(e))
 
     async def add_role_new(self, member):
         new_role = discord.utils.get(self.guild.roles, name="New")

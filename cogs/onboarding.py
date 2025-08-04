@@ -1,3 +1,4 @@
+# cogs->onboarding.py
 import discord
 from utils.onboarding_manager import OnboardingManager
 from utils.welcome_manager import WelcomeMessageManager
@@ -9,6 +10,7 @@ class Onboarding(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = load_config()
+        self.pending_onboarding = {}
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -38,6 +40,14 @@ class Onboarding(commands.Cog):
             await welcome_manager.send_welcome_message(message.author, welcome_channel)
             await self.bot.process_commands(message)
 
+    @commands.Cog.listener()
+    async def on_member_update(self, before, after):
+        if after.id in self.pending_onboarding and after.flags.completed_onboarding and not before.flags.completed_onboarding:
+            logging.info(f"{after.name} has finished onboarding")
+            manager = OnboardingManager(after.guild)
+            await manager.handle_onboarding_roles(after)
+            del self.pending_onboarding[after.id]  # Remove from pending
+            logging.info(f"Removed {after.name} from pending_onboarding")
+
 async def setup(bot):
     await bot.add_cog(Onboarding(bot))
-
