@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 load_dotenv()  # Loading variables from .env automatic
 
 def load_config():
-    env = os.getenv('ENVIRONMENT', 'MAIN').upper() # Use MAIN in main
+    env = os.getenv('ENVIRONMENT', 'TEST').upper() # Use MAIN in main
 
     config = {
         'MAIN': {
             'token': os.getenv('MAIN_TOKEN'),
-            'waiting_hall_id': int(os.getenv('WAITING_HALL_ID', '1399070297365155850')),
+            'start_here_channel_id': int(os.getenv('START_HERE_ID', '1399070297365155850')),
             'welcome_channel_id': int(os.getenv('WELCOME_CHANNEL_ID', '825128605868490815')),
             'introduction_channel_id': int(os.getenv('INTRODUCTION_CHANNEL_ID', '1151609579000561776')),
             'information_channel_id': int(os.getenv('INFORMATION_CHANNEL_ID', '1363917217309130963')),
@@ -18,7 +18,7 @@ def load_config():
         },
         'TEST': {
             'token': os.getenv('TEST_TOKEN'),
-            'waiting_hall_id': int(os.getenv('TEST_WAITING_HALL_ID', '1400948241683714148')),
+            'start_here_channel_id': int(os.getenv('TEST_START_HERE_ID', '1400948241683714148')),
             'welcome_channel_id': int(os.getenv('TEST_WELCOME_CHANNEL_ID', '676134286788788246')),
             'introduction_channel_id': int(os.getenv('TEST_INTRODUCTION_CHANNEL_ID', '1135933120865107968')),
             'information_channel_id': int(os.getenv('TEST_INFORMATION_CHANNEL_ID', '1135937853558358016')),

@@ -33,7 +33,7 @@ async def load_cogs():
 
 @bot.event
 async def on_ready():
-    logging.info(f'Logged in as {bot.user.name} in {env}-mode.')
+    logging.info(f'Logged in as {bot.user.name} in {config['environment']}-mode.')
 
 # Run bot
 async def main():

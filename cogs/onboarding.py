@@ -30,7 +30,7 @@ class Onboarding(commands.Cog):
             return
         logging.info(f"Message received from {message.author.name} in channel {message.channel.name} with id {message.channel.id}")
         logging.info("%s has roles: %s", message.author.name, [role.name for role in message.author.roles])
-        if message.channel.id == self.config['waiting_hall_id']:
+        if message.channel.id == self.config['start_here_channel_id']:
             manager = OnboardingManager(message.guild)
             welcome_manager = WelcomeMessageManager(message.author)
             await manager.handle_onboarding_message(message.author, message.channel)
