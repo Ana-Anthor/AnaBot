@@ -16,14 +16,18 @@ class Onboarding(commands.Cog):
     async def on_member_join(self, member):
         logging.info(f"Member joined: {member.name} ({member.id})")
         if member.bot:
+            logging.info("Member vas a bot.")
             return
         try:
             member = await member.guild.fetch_member(member.id)
             manager = OnboardingManager(member.guild)
+            self.pending_onboarding[member.id] = True
+            logging.info(f"{member.name} waiting for onboarding")
             await manager.handle_member_join(member)
         except discord.NotFound:
             logging.info("Member not found.")
-
+        except Exception as e:
+            logging.error(f"Error in on_member_join for {member.name}: {e}")
 
     @commands.Cog.listener()
     async def on_message(self, message):
