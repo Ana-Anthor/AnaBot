@@ -21,12 +21,15 @@ class OnboardingManager:
         await asyncio.sleep(10)  # Wait for Discord to sync
         member = await self.guild.fetch_member(member.id)
         logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
-
+        if len(member.roles) > 2:
+            logging.info("No extra roles appered. Waiting for 20 s")
+            await asyncio.sleep(10)  # Wait for Discord to sync
+            logging.info("%s has roles: %s", member.name, [role.name for role in member.roles])
         # Store roles in dictionary
         original_roles = await self.get_roles(member)
         self.onboarding_roles[member.id] = original_roles
 
-        # Remove old roles excetpt "@everyone" and "New"
+        # Remove old roles except "@everyone" and "New"
         roles_to_remove = [
             role for role in original_roles if role.name not in ("@everyone", "New")
         ]
