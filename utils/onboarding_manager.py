@@ -6,54 +6,34 @@ from utils.config import load_config
 #from storage.database import Database TODO: add database
 
 class OnboardingManager:
-    def __init__(self, guild):
+    def __init__(self, guild, onboarding_roles):
         self.guild = guild
-        self.onboarding_roles = {}  # Internal dictionary for role storage: self.db = DataBase()
+        self.onboarding_roles = onboarding_roles
         self.config = load_config()
 
-    async def handle_member_join(self, member):
-        logging.info("Bot permissions: %s", member.guild.me.guild_permissions)
-        logging.info("Bot's highest role: %s (position %d)", member.guild.me.top_role.name, member.guild.me.top_role.position)
-        logging.info("Member %s initial roles: %s", member.name, [role.name for role in member.roles])
-        await self.add_role_new(member)
-        start_here_channel = member.guild.get_channel(self.config['start_here_channel_id'])
-        await self.send_verification_question(member, start_here_channel)
-   
-    async def handle_onboarding_roles(self, member):
-        # Store roles in dictionary
-        original_roles = await self.get_roles(member)
-        self.onboarding_roles[member.id] = original_roles
+#1a
+    async def add_role_new(self, member):
+        new_role = discord.utils.get(self.guild.roles, name="New")
+        if not new_role:
+            new_role = await self.guild.create_role(name="New", colour=discord.Colour.orange())
+            logging.info("Created New role (position %d)", new_role.position)
+        else:
+            logging.info("Found existing New role (position %d)", new_role.position)
+            if new_role.position >= self.guild.me.top_role.position:
+                logging.error("Cannot assign New role to %s: role position %d >= bot's top role position %d", 
+                                member.name, new_role.position, self.guild.me.top_role.position)
+                return
+        try:
+            await member.add_roles(new_role)
+            logging.info("Added New role to %s", member.name)
+        except discord.Forbidden:
+            logging.error("Error adding New role to %s: Missing manage_roles permission or role hierarchy issue", member.name)
+        except discord.HTTPException as e:
+            logging.error("HTTP error adding New role to %s: %s", member.name, str(e))
+        except Exception as e:
+            logging.error("Error adding New role to %s: %s", member.name, str(e))
 
-        # Remove old roles except "@everyone" and "New"
-        roles_to_remove = [
-            role for role in original_roles if role.name not in ("@everyone", "New")
-        ]
-
-        await self.remove_all_roles(member, roles_to_remove)
-        member = await self.guild.fetch_member(member.id)
-        logging.info("%s final roles: %s", member.name, [role.name for role in member.roles])
-
-
-    async def handle_onboarding_message(self, member, channel): ###
-        # Restore roles from dictionary
-        roles = self.onboarding_roles.get(member.id, [])
-        for role in roles:
-            try:
-                if role.name != "@everyone":  # Safety check
-                    await member.add_roles(role)
-                    logging.info("Restored role %s for %s", role.name, member.name)   
-            except Exception as e:
-                logging.error("Error restoring role %s for %s: %s", 
-                             role.name, member.name, str(e))
-
-        # Remove "New" role
-        await self.remove_role_new(member)
-
-        # Add "Member" role
-        await self.add_role_member(member)
-
-        await channel.send(f"{member.mention}, you're officially a part of the squad! 🔓 You now have full access. Enjoy your stay!")
-
+#1b
     async def send_verification_question(self, member: discord.Member, channel: discord.TextChannel):
         # Send a verification question to a new member in the start-here channel
         if not channel:
@@ -76,50 +56,45 @@ class OnboardingManager:
         except Exception as e:
             logging.error(f"Error sending verification question to {member.name}: {e}")
 
-    async def get_roles(self, member):
-        # Exclude @everyone as it's a default role that shouldn't be stored or manipulated
-        return [role for role in member.roles if role.name != "@everyone"]
+#2a
+    async def pemporary_store_and_remove_onboarding_roles(self, member):
+        # Store roles in dictionary original_roles with member.id as key
+        original_roles = await self.get_roles(member) #2aa
+        self.onboarding_roles[member.id] = original_roles
 
-    async def remove_all_roles(self, member, roles):
+        # Remove roles from member except "@everyone" and "New"
+        roles_to_remove = [
+            role for role in original_roles if role.name not in ("@everyone", "New")
+        ]
+
+        await self.remove_all_roles(member, roles_to_remove) #2ab
+        member = await self.guild.fetch_member(member.id)
+        logging.info("%s final roles: %s", member.name, [role.name for role in member.roles]) # should only be @everyone and New
+
+#3a
+    async def restore_onboarding_roles(self, member, channel):
+        # Restore roles from dictionary
+        roles = self.onboarding_roles.get(member.id, [])
         for role in roles:
             try:
-                await member.remove_roles(role)
-                logging.info("Removed role: %s", role.name)
+                if role.name != "@everyone":  # Safety check
+                    await member.add_roles(role)
+                    logging.info("Restored role %s for %s", role.name, member.name)   
             except Exception as e:
-                logging.info("Error removing role %s: %s", role.name, str(e))
+                logging.error("Error restoring role %s for %s: %s", role.name, member.name, str(e))
+        self.onboarding_roles.pop(member.id, None)        
 
-    async def add_role_new(self, member):
-        new_role = discord.utils.get(self.guild.roles, name="New")
-        if not new_role:
-            new_role = await self.guild.create_role(name="New", colour=discord.Colour.orange())
-            logging.info("Created New role (position %d)", new_role.position)
-            #TODO: add exception if making new roles is forbidden
-        else:
-            logging.info("Found existing New role (position %d)", new_role.position)
-            if new_role.position >= self.guild.me.top_role.position:
-                logging.error("Cannot assign New role to %s: role position %d >= bot's top role position %d", 
-                                member.name, new_role.position, self.guild.me.top_role.position)
-                return
-        try:
-            await member.add_roles(new_role)
-            logging.info("Added New role to %s", member.name)
-        except discord.Forbidden:
-            logging.error("Error adding New role to %s: Missing manage_roles permission or role hierarchy issue", member.name)
-        except discord.HTTPException as e:
-            logging.error("HTTP error adding New role to %s: %s", member.name, str(e))
-        except Exception as e:
-            logging.error("Error adding New role to %s: %s", member.name, str(e))
-
+#3b
     async def remove_role_new(self, member):
         new_role = discord.utils.get(self.guild.roles, name="New")
         if new_role and new_role in member.roles:
             try:
                 await member.remove_roles(new_role)
                 logging.info("Removed New role from %s", member.name)
-                self.onboarding_roles.pop(member.id, None)
             except Exception as e:
                 logging.error("Error removing New role from %s: %s", member.name, str(e))
 
+#3c
     async def add_role_member(self, member):
         member_role = discord.utils.get(self.guild.roles, name="Member")
         if not member_role:
@@ -128,7 +103,19 @@ class OnboardingManager:
         await member.add_roles(member_role)
         logging.info("Added Member role to %s", member.name)
 
-"""     # TODO: updata handle_member_join after db is added:
-    async def handle_member_join(self, member):
-        original_roles = self.get_roles(member)
-        await self.db.store_roles(member.id, [role.id for role in original_roles]) """
+
+#2aa
+    async def get_roles(self, member):
+        # Exclude @everyone as it's a default role that shouldn't be stored or manipulated
+        return [role for role in member.roles if role.name != "@everyone"]
+
+#2ab
+    async def remove_all_roles(self, member, roles):
+        for role in roles:
+            try:
+                await member.remove_roles(role)
+                logging.info("Removed role: %s", role.name)
+            except Exception as e:
+                logging.info("Error removing role %s: %s", role.name, str(e))
+
+
